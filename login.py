@@ -1,14 +1,16 @@
 import os
+import time
 import urllib
 import ConfigParser
 import urllib2
 import getinfo
-url = 'http://10.255.44.33/cgi-bin/srun_portal'
+import sys
+url = 'http://10.9.27.18/include/auth_action.php'
 
 
 cf = ConfigParser.ConfigParser()
-cf.read("config.ini")
-
+cf.read(sys.path[0]+"/config.ini")
+print sys.path[0]
 
 username = cf.get("info","username")
 
@@ -16,26 +18,36 @@ password = cf.get("info","password")
 do_login = {'action':'login',
           'username':username,
           'password':password,
-          'ac_id':'6',
-          'type':'1',
-          'wbaredirect':'',
-          'mac':'',
-          'user_ip':''
+          'ac_id':'4',
+          'user_ip':'',
+          'nas_ip':'',
+          'user_mac':'',
+          'save_me':'0',
+          'ajax':'1'
          }
 do_logout = {'action':'login'
          }
 data = urllib.urlencode(do_login)
-#print data
-req = urllib2.Request(url, data)
-response = urllib2.urlopen(req)
-the_page = response.read()
+status = False
+while True:
+    ret = os.system('ping -c 2 114.114.114.114 >/dev/null')
+    if ret:
+        status = False
+        req = urllib2.Request(url, data)
+        response = urllib2.urlopen(req)
+        the_page = response.read()
+        print 'try connecting ...'
+    else:
+        if status==False:
+            status = True
+            print 'connected'
+    time.sleep(10)
 
+#print the_page
+#if the_page.find("login_ok"):
+#    print "Successful login !"
+#    getinfo.doit()
 
-if the_page.find("login_ok"):
-    print "Successful login !"
-    getinfo.doit()
-
-else:
-    print the_page
-    
-os.system("pause")
+#else:
+#    print the_page    
+#os.system("pause")

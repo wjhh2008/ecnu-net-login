@@ -1,5 +1,5 @@
 import os
-import urllib2
+import urllib2
 def doit():
     urlinfo = 'http://10.255.44.33/cgi-bin/rad_user_info'
     req = urllib2.Request(urlinfo, "")

@@ -33,9 +33,12 @@ while True:
     ret = os.system('ping -c 2 114.114.114.114 >/dev/null')
     if ret:
         status = False
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        the_page = response.read()
+        try:
+            req = urllib2.Request(url, data)
+            response = urllib2.urlopen(req)
+            the_page = response.read()
+        except:
+            pass
         print 'try connecting ...'
     else:
         if status==False:
